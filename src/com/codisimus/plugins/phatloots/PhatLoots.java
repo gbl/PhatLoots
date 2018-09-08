@@ -118,6 +118,10 @@ public class PhatLoots extends JavaPlugin {
             debug("Plugin MythicDrops could not be found, support has been turned off.");
         }
 
+        // This will always fail, as MythicMobs has us as softdepend, but we
+        // don't have them. Adding them would only cause confusion, because
+        // sometimes we'd find them, and sometimes they'd find us, but never
+        // both ways, so let's keep it at that.
         mythicMobsSupport = Bukkit.getPluginManager().isPluginEnabled("MythicMobs");
         if (mythicMobsSupport) {
             logger.info("Enabling MythicMobs support");
