@@ -1,6 +1,7 @@
 name: PhatLoots
 main: com.codisimus.plugins.phatloots.PhatLoots
-version: 4.2.3
+version: gbl 1.13 [mc1.13, forked from Codisimus 4.2.3]
+api-version: 1.13
 author: Codisimus
 website: www.codisimus.com
 description: Chests with randomly generated money/items

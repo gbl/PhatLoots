@@ -104,4 +104,9 @@ public class PhatLootsCommandSender implements CommandSender {
     public void setOp(boolean bln) {
         throw new UnsupportedOperationException("Not supported.");
     }
+
+    @Override
+    public Spigot spigot() {
+        return new CommandSender.Spigot();
+    }
 }

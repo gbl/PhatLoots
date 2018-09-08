@@ -59,8 +59,10 @@
 
     <target name="ci" depends="compile-latest-deps,test,jar,javadoc-latest-deps"/>
 
+    <!--
     <target name="-post-jar">
         <copy failonerror="false" file="${dist.jar}" todir="..\Libraries"/>
         <delete dir="${build.dir}"/>
     </target>
+    -->
 </project>

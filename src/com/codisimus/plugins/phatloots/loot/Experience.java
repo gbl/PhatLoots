@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.serialization.SerializableAs;
@@ -48,7 +49,7 @@ public class Experience extends Loot {
      */
     public static void registerButton() {
         //Register the Add Experience Button
-        ItemStack item = new ItemStack(Material.EXP_BOTTLE);
+        ItemStack item = new ItemStack(Material.EXPERIENCE_BOTTLE);
         ItemMeta info = Bukkit.getItemFactory().getItemMeta(item.getType());
         info.setDisplayName("§2Add experience...");
         item.setItemMeta(info);
@@ -72,6 +73,7 @@ public class Experience extends Loot {
      *
      * @param map The map of data values
      */
+    @SuppressWarnings("UnusedAssignment")           // NB bug, they are used in the exception handler
     public Experience(Map<String, Object> map) {
         String currentLine = null; //The value that is about to be loaded (used for debugging)
         try {
@@ -80,11 +82,11 @@ public class Experience extends Loot {
             upperAmount = (Integer) map.get(currentLine = "Upper");
         } catch (Exception ex) {
             //Print debug messages
-            PhatLoots.logger.severe("Failed to load Experience line: " + currentLine);
-            PhatLoots.logger.severe("of PhatLoot: " + (PhatLoot.current == null ? "unknown" : PhatLoot.current));
+            PhatLoots.logger.log(Level.SEVERE, "Failed to load Experience line: {0}", currentLine);
+            PhatLoots.logger.log(Level.SEVERE, "of PhatLoot: {0}", PhatLoot.current == null ? "unknown" : PhatLoot.current);
             PhatLoots.logger.severe("Last successfull load was...");
-            PhatLoots.logger.severe("PhatLoot: " + (PhatLoot.last == null ? "unknown" : PhatLoot.last));
-            PhatLoots.logger.severe("Loot: " + (Loot.last == null ? "unknown" : Loot.last.toString()));
+            PhatLoots.logger.log(Level.SEVERE, "PhatLoot: {0}", PhatLoot.last == null ? "unknown" : PhatLoot.last);
+            PhatLoots.logger.log(Level.SEVERE, "Loot: {0}", Loot.last == null ? "unknown" : Loot.last.toString());
         }
     }
 
@@ -107,7 +109,7 @@ public class Experience extends Loot {
     @Override
     public ItemStack getInfoStack() {
         //An Experience loot is represented by an Experience Bottle
-        ItemStack infoStack = new ItemStack(Material.EXP_BOTTLE);
+        ItemStack infoStack = new ItemStack(Material.EXPERIENCE_BOTTLE);
 
         //Set the display name of the item
         ItemMeta info = Bukkit.getItemFactory().getItemMeta(infoStack.getType());

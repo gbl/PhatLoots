@@ -3,22 +3,14 @@ package com.codisimus.plugins.phatloots.loot;
 import com.codisimus.plugins.phatloots.PhatLoot;
 import com.codisimus.plugins.phatloots.PhatLoots;
 import com.codisimus.plugins.phatloots.PhatLootsUtil;
-import com.codisimus.plugins.phatloots.gui.Button;
-import com.codisimus.plugins.phatloots.gui.InventoryListener;
 import com.codisimus.plugins.phatloots.gui.Tool;
 import java.util.*;
-import com.tealcube.minecraft.bukkit.mythicdrops.MythicDropsPlugin;
-import com.tealcube.minecraft.bukkit.mythicdrops.api.items.ItemGenerationReason;
-import com.tealcube.minecraft.bukkit.mythicdrops.api.tiers.Tier;
-import com.tealcube.minecraft.bukkit.mythicdrops.tiers.TierMap;
-import com.tealcube.minecraft.bukkit.mythicdrops.utils.ItemStackUtil;
-import com.tealcube.minecraft.bukkit.mythicdrops.utils.TierUtil;
+import java.util.logging.Level;
 import net.elseland.xikage.MythicMobs.Items.MythicItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.event.inventory.ClickType;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -60,6 +52,7 @@ public class MythicMobsItem extends Loot {
      *
      * @param map The map of data values
      */
+    @SuppressWarnings({"UnusedAssignment", "OverridableMethodCallInConstructor"})
     public MythicMobsItem(Map<String, Object> map) {
         String currentLine = null; //The value that is about to be loaded (used for debugging)
         try {
@@ -74,11 +67,11 @@ public class MythicMobsItem extends Loot {
             }
         } catch (Exception ex) {
             //Print debug messages
-            PhatLoots.logger.severe("Failed to load MythicMobsItem line: " + currentLine);
-            PhatLoots.logger.severe("of PhatLoot: " + (PhatLoot.current == null ? "unknown" : PhatLoot.current));
+            PhatLoots.logger.log(Level.SEVERE, "Failed to load MythicMobsItem line: {0}", currentLine);
+            PhatLoots.logger.log(Level.SEVERE, "of PhatLoot: {0}", PhatLoot.current == null ? "unknown" : PhatLoot.current);
             PhatLoots.logger.severe("Last successfull load was...");
-            PhatLoots.logger.severe("PhatLoot: " + (PhatLoot.last == null ? "unknown" : PhatLoot.last));
-            PhatLoots.logger.severe("Loot: " + (Loot.last == null ? "unknown" : Loot.last.toString()));
+            PhatLoots.logger.log(Level.SEVERE, "PhatLoot: {0}", PhatLoot.last == null ? "unknown" : PhatLoot.last);
+            PhatLoots.logger.log(Level.SEVERE, "Loot: {0}", Loot.last == null ? "unknown" : Loot.last.toString());
         }
     }
 
@@ -102,7 +95,7 @@ public class MythicMobsItem extends Loot {
     @Override
     public ItemStack getInfoStack() {
         //A MythicDropsItem is represented by an Enchantment Table
-        ItemStack infoStack = new ItemStack(Material.ENCHANTMENT_TABLE);
+        ItemStack infoStack = new ItemStack(Material.ENCHANTING_TABLE);
 
         //Set the display name of the item
         ItemMeta info = Bukkit.getItemFactory().getItemMeta(infoStack.getType());

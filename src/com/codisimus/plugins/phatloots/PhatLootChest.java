@@ -4,6 +4,7 @@ import com.codisimus.plugins.phatloots.events.ChestBreakEvent;
 import com.codisimus.plugins.phatloots.events.ChestRespawnEvent;
 import com.codisimus.plugins.phatloots.events.ChestRespawnEvent.RespawnReason;
 import java.util.*;
+import java.util.logging.Level;
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.entity.EntityType;
@@ -20,15 +21,15 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class PhatLootChest {
     private static EnumSet<Material> untriggeredRedstone = EnumSet.of(
-        Material.REDSTONE_WIRE, Material.REDSTONE_COMPARATOR_OFF,
-        Material.REDSTONE_LAMP_OFF, Material.REDSTONE_TORCH_OFF,
-        Material.DIODE_BLOCK_OFF, Material.DISPENSER, Material.DROPPER,
-        Material.NOTE_BLOCK, Material.PISTON_BASE, Material.TNT
+        Material.REDSTONE_WIRE, Material.COMPARATOR,
+        Material.REDSTONE_LAMP, Material.REDSTONE_TORCH,
+        Material.REPEATER, Material.DISPENSER, Material.DROPPER,
+        Material.NOTE_BLOCK, Material.PISTON, Material.TNT
     );
     private static EnumSet<Material> triggeredRedstone = EnumSet.of(
-        Material.REDSTONE_WIRE, Material.REDSTONE_COMPARATOR_ON,
-        Material.REDSTONE_LAMP_ON, Material.REDSTONE_TORCH_ON,
-        Material.DIODE_BLOCK_ON, Material.PISTON_BASE
+        Material.REDSTONE_WIRE, Material.COMPARATOR,
+        Material.REDSTONE_LAMP, Material.REDSTONE_TORCH,
+        Material.REPEATER, Material.PISTON
     );
     private static HashMap<String, PhatLootChest> chests = new HashMap<>(); //Chest Location -> PhatLootChest
     static HashSet<PhatLootChest> chestsToRespawn = new HashSet<>();
@@ -75,7 +76,7 @@ public class PhatLootChest {
         this.z = z;
         World w = Bukkit.getWorld(world);
         if (w == null) { //The world is not currently loaded
-            PhatLoots.logger.warning("The world '" + world + "' is not currently loaded, all linked chests in this world are being unlinked.");
+            PhatLoots.logger.log(Level.WARNING, "The world ''{0}'' is not currently loaded, all linked chests in this world are being unlinked.", world);
             PhatLoots.logger.warning("THIS CHEST UNLINKING IS PERMANANT IF YOU LINK/UNLINK ANY OTHER CHESTS IN THIS PHATLOOT!");
         } else {
             Block block = w.getBlockAt(x, y, z);
@@ -132,7 +133,7 @@ public class PhatLootChest {
     public static PhatLootChest getChest(String[] data) {
         try {
             return getChest(data[0], Integer.parseInt(data[1]), Integer.parseInt(data[2]), Integer.parseInt(data[3]));
-        } catch (Exception ex) {
+        } catch (NumberFormatException ex) {
             return null;
         }
     }
@@ -221,7 +222,7 @@ public class PhatLootChest {
         //Only 'spawn' the new chest if it is not triggered to respawn
         if (state == null) {
             target.setType(block.getType());
-            target.setData(block.getData());
+//1.13            target.setData(block.getData());
         } else {
             state = target.getState();
         }
@@ -271,7 +272,7 @@ public class PhatLootChest {
         }
 
         if (soundOnBreak) {
-            block.getWorld().playSound(block.getLocation(), Sound.ENTITY_ZOMBIE_BREAK_DOOR_WOOD, 1, 1);
+            block.getWorld().playSound(block.getLocation(), Sound.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR, 1, 1);
         }
     }
 
@@ -713,6 +714,7 @@ public class PhatLootChest {
      * @param block The given Block which has redstone qualities
      */
     private static void trigger(Block block) {
+/* 1.13 @TODO         
         switch (block.getType()) {
         case REDSTONE_WIRE: //Toggle the power level
             block.setData((byte) (block.getData() ^ (byte) 15), true);
@@ -760,6 +762,7 @@ public class PhatLootChest {
             break;
         default: break;
         }
+*/        
     }
 
     /**

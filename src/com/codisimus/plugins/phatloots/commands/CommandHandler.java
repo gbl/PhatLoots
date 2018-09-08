@@ -73,12 +73,13 @@ public class CommandHandler implements CommandExecutor {
         parentCommand = null;
     }
 
+    @SuppressWarnings("LeakingThisInConstructor")
     public CommandHandler(JavaPlugin plugin, String commandGroup) {
         this.plugin = plugin;
         groupedCommands = true;
         PluginCommand command = plugin.getCommand(commandGroup);
         if (command == null) {
-            plugin.getLogger().warning("CodCommand " + commandGroup + " was not found in plugin.yml");
+            plugin.getLogger().log(Level.WARNING, "CodCommand {0} was not found in plugin.yml", commandGroup);
             parentCommand = null;
         } else {
             command.setExecutor(this);
@@ -101,7 +102,7 @@ public class CommandHandler implements CommandExecutor {
 
             //Verify the command returns a boolean
             if (method.getReturnType() == Boolean.class) {
-                plugin.getLogger().warning("CodCommand " + method.getName() + " does not return a boolean");
+                plugin.getLogger().log(Level.WARNING, "CodCommand {0} does not return a boolean", method.getName());
                 continue;
             }
 
@@ -110,7 +111,7 @@ public class CommandHandler implements CommandExecutor {
             if (!groupedCommands) {
                 PluginCommand command = plugin.getCommand(annotation.command());
                 if (command == null) {
-                    plugin.getLogger().warning("CodCommand " + method.getName() + " was not found in plugin.yml");
+                    plugin.getLogger().log(Level.WARNING, "CodCommand {0} was not found in plugin.yml", method.getName());
                     continue;
                 }
                 command.setExecutor(this);
@@ -308,9 +309,12 @@ public class CommandHandler implements CommandExecutor {
                     return null;
                 }
             case MATERIAL:
+/* 1.13                
                 return argument.matches("[0-9]+")
                        ? Material.getMaterial(Integer.parseInt(argument))
                        : Material.matchMaterial(argument);
+*/
+                return Material.matchMaterial(argument);
             case PLAYER:
                 return Bukkit.getPlayer(argument);
             case OFFLINEPLAYER:
@@ -322,7 +326,8 @@ public class CommandHandler implements CommandExecutor {
             default:
                 return null;
             }
-        } catch (Exception ex) {
+        } catch (NumberFormatException ex) {
+            plugin.getLogger().log(Level.INFO, "validate ''{0}'' failed!", argument);
             return null;
         }
     }

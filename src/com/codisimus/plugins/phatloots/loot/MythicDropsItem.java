@@ -13,6 +13,7 @@ import com.tealcube.minecraft.bukkit.mythicdrops.api.tiers.Tier;
 import com.tealcube.minecraft.bukkit.mythicdrops.tiers.TierMap;
 import com.tealcube.minecraft.bukkit.mythicdrops.utils.ItemStackUtil;
 import com.tealcube.minecraft.bukkit.mythicdrops.utils.TierUtil;
+import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.serialization.SerializableAs;
@@ -72,7 +73,7 @@ public class MythicDropsItem extends Loot {
      */
     public static void registerButtonAndTool() {
         //Register the Add Collection Button
-        ItemStack item = new ItemStack(Material.ENCHANTMENT_TABLE);
+        ItemStack item = new ItemStack(Material.ENCHANTING_TABLE);
         ItemMeta info = Bukkit.getItemFactory().getItemMeta(item.getType());
         List<String> uses = new ArrayList<>();
         info.setDisplayName("§2Add new MythicDrops Item...");
@@ -88,7 +89,7 @@ public class MythicDropsItem extends Loot {
         InventoryListener.registerButton(new AddMythicDropsItemButton(item));
 
 
-        item = new ItemStack(Material.ENCHANTMENT_TABLE);
+        item = new ItemStack(Material.ENCHANTING_TABLE);
         ItemMeta meta = Bukkit.getItemFactory().getItemMeta(item.getType());
         List<String> lore = new ArrayList<>();
         meta.setDisplayName("§2MythicDrops Toggle (Click to change Tool)");
@@ -142,6 +143,7 @@ public class MythicDropsItem extends Loot {
      *
      * @param map The map of data values
      */
+    @SuppressWarnings({"UnusedAssignment", "OverridableMethodCallInConstructor"})
     public MythicDropsItem(Map<String, Object> map) {
         String currentLine = null; //The value that is about to be loaded (used for debugging)
         try {
@@ -162,11 +164,11 @@ public class MythicDropsItem extends Loot {
             }
         } catch (Exception ex) {
             //Print debug messages
-            PhatLoots.logger.severe("Failed to load MythicDropsItem line: " + currentLine);
-            PhatLoots.logger.severe("of PhatLoot: " + (PhatLoot.current == null ? "unknown" : PhatLoot.current));
+            PhatLoots.logger.log(Level.SEVERE, "Failed to load MythicDropsItem line: {0}", currentLine);
+            PhatLoots.logger.log(Level.SEVERE, "of PhatLoot: {0}", PhatLoot.current == null ? "unknown" : PhatLoot.current);
             PhatLoots.logger.severe("Last successfull load was...");
-            PhatLoots.logger.severe("PhatLoot: " + (PhatLoot.last == null ? "unknown" : PhatLoot.last));
-            PhatLoots.logger.severe("Loot: " + (Loot.last == null ? "unknown" : Loot.last.toString()));
+            PhatLoots.logger.log(Level.SEVERE, "PhatLoot: {0}", PhatLoot.last == null ? "unknown" : PhatLoot.last);
+            PhatLoots.logger.log(Level.SEVERE, "Loot: {0}", Loot.last == null ? "unknown" : Loot.last.toString());
         }
     }
 
@@ -199,7 +201,7 @@ public class MythicDropsItem extends Loot {
     @Override
     public ItemStack getInfoStack() {
         //A MythicDropsItem is represented by an Enchantment Table
-        ItemStack infoStack = new ItemStack(Material.ENCHANTMENT_TABLE);
+        ItemStack infoStack = new ItemStack(Material.ENCHANTING_TABLE);
 
         //Set the display name of the item
         ItemMeta info = Bukkit.getItemFactory().getItemMeta(infoStack.getType());

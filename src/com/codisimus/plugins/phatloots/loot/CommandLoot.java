@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
+import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.serialization.SerializableAs;
@@ -58,6 +59,7 @@ public class CommandLoot extends Loot {
      *
      * @param map The map of data values
      */
+    @SuppressWarnings("UnusedAssignment")       // NB Bug, they are used in the exception handler ...
     public CommandLoot(Map<String, Object> map) {
         String currentLine = null; //The value that is about to be loaded (used for debugging)
         try {
@@ -70,11 +72,11 @@ public class CommandLoot extends Loot {
             tempOP = (Boolean) map.get(currentLine = "TempOP");
         } catch (Exception ex) {
             //Print debug messages
-            PhatLoots.logger.severe("Failed to load CommandLoot line: " + currentLine);
-            PhatLoots.logger.severe("of PhatLoot: " + (PhatLoot.current == null ? "unknown" : PhatLoot.current));
+            PhatLoots.logger.log(Level.SEVERE, "Failed to load CommandLoot line: {0}", currentLine);
+            PhatLoots.logger.log(Level.SEVERE, "of PhatLoot: {0}", PhatLoot.current == null ? "unknown" : PhatLoot.current);
             PhatLoots.logger.severe("Last successfull load was...");
-            PhatLoots.logger.severe("PhatLoot: " + (PhatLoot.last == null ? "unknown" : PhatLoot.last));
-            PhatLoots.logger.severe("Loot: " + (Loot.last == null ? "unknown" : Loot.last.toString()));
+            PhatLoots.logger.log(Level.SEVERE, "PhatLoot: {0}", PhatLoot.last == null ? "unknown" : PhatLoot.last);
+            PhatLoots.logger.log(Level.SEVERE, "Loot: {0}", Loot.last == null ? "unknown" : Loot.last.toString());
         }
     }
 
@@ -116,7 +118,7 @@ public class CommandLoot extends Loot {
                 }
                 if (fromConsole) { //From console
                     Bukkit.dispatchCommand(cs, cmd);
-                } else if (tempOP) { //From Player as OP
+                } else if (tempOP && player != null) { //From Player as OP
                     //Make the player OP for long enough to execute the command
                     player.setOp(true);
                     Bukkit.dispatchCommand(player, cmd);
@@ -136,7 +138,7 @@ public class CommandLoot extends Loot {
     @Override
     public ItemStack getInfoStack() {
         //A CommandLoot is represented by a Command Block
-        ItemStack infoStack = new ItemStack(Material.COMMAND);
+        ItemStack infoStack = new ItemStack(Material.COMMAND_BLOCK);
 
         //Set the display name of the item
         ItemMeta info = Bukkit.getItemFactory().getItemMeta(infoStack.getType());
